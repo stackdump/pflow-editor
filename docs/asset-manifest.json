@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/pflow-editor/static/css/main.c5ca4692.chunk.css",
+    "main.js": "/pflow-editor/static/js/main.280ca3fa.chunk.js",
+    "main.js.map": "/pflow-editor/static/js/main.280ca3fa.chunk.js.map",
+    "runtime-main.js": "/pflow-editor/static/js/runtime-main.ac63b316.js",
+    "runtime-main.js.map": "/pflow-editor/static/js/runtime-main.ac63b316.js.map",
+    "static/js/2.8bc42ee9.chunk.js": "/pflow-editor/static/js/2.8bc42ee9.chunk.js",
+    "static/js/2.8bc42ee9.chunk.js.map": "/pflow-editor/static/js/2.8bc42ee9.chunk.js.map",
+    "index.html": "/pflow-editor/index.html",
+    "precache-manifest.4276833e1248e4e45857eea79aff635e.js": "/pflow-editor/precache-manifest.4276833e1248e4e45857eea79aff635e.js",
+    "service-worker.js": "/pflow-editor/service-worker.js",
+    "static/css/main.c5ca4692.chunk.css.map": "/pflow-editor/static/css/main.c5ca4692.chunk.css.map",
+    "static/js/2.8bc42ee9.chunk.js.LICENSE": "/pflow-editor/static/js/2.8bc42ee9.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ac63b316.js",
+    "static/js/2.8bc42ee9.chunk.js",
+    "static/css/main.c5ca4692.chunk.css",
+    "static/js/main.280ca3fa.chunk.js"
+  ]
+}
