@@ -7,7 +7,7 @@ class StateMachine {
         this.state = [];
         this.capacity = [];
         this.transitions = transitions;
-        this.history = [];
+        this.places = places;
 
         for (const i in places) {
             this.capacity[places[i].offset] = places[i].capacity;
@@ -15,6 +15,8 @@ class StateMachine {
         }
 
         this.canFire = this.canFire.bind(this);
+        this.guardsFail = this.guardsFail.bind(this);
+        this.transitionFails = this.transitionFails.bind(this);
         this.fire = this.fire.bind(this);
     }
 
@@ -44,6 +46,12 @@ class StateMachine {
         }
 
         return false;
+    }
+
+    transitionFails(oid, multiple) {
+        let t = this.transitions[oid];
+        let res = this.vadd(this.state, t.delta, multiple || 1);
+        return !res[1]
     }
 
     canFire(oid, multiple) {

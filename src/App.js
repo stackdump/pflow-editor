@@ -27,7 +27,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.open("counter");
+        this.open("pshort");
     }
 
     render() {
@@ -36,9 +36,7 @@ class App extends Component {
         }
 
         return (
-            <div className={"App"}>
-                <Editor getPflow={this.getPflow} setPflow={this.setPflow} />
-            </div>
+            <Editor getPflow={this.getPflow} setPflow={this.setPflow} />
         )
     }
 }

@@ -1,3 +1,4 @@
+
 button {
     -webkit-user-select: none; /* webkit (safari, chrome) browsers */
     -moz-user-select: none; /* mozilla browsers */
@@ -12,6 +13,13 @@ text {
     -ms-user-select: none; /* IE10+ */
 }
 
+.note { font: 12px sans-serif; }
 .small { font: bold 10px sans-serif; }
 .medium { font: bold 12px sans-serif; }
 .large { font: bold 14px sans-serif; }
+
+
+a {
+    color:inherit;
+    text-decoration: none;
+}

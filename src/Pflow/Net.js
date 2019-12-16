@@ -2,17 +2,23 @@ import React, {Component} from 'react';
 import Place from './Place'
 import Arc from './Arc'
 import Transition from './Transition'
+import PVar from './Var'
 
 class Net extends Component {
 
     render() {
         let p = this.props.ptnet.places;
         let t = this.props.ptnet.transitions;
+        let v = this.props.ptnet.vars;
         let place_index = [];
 
         for (const label in p) {
             place_index[p[label].offset] = label
         }
+
+        const vars = Object.keys(v).map((label, index) =>
+            <PVar key={label} id={label} ptnet={this.props.ptnet} />
+        );
 
         const places = Object.keys(p).map((label, index) =>
             <Place key={label} id={label} ptnet={this.props.ptnet} />
@@ -52,6 +58,7 @@ class Net extends Component {
 
         return (
             <g id={this.props.schema}>
+                { vars }
                 { arcs }
                 { places }
                 { transitions }

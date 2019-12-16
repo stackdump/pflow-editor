@@ -8,11 +8,14 @@ export default class Transition extends Draggable {
     }
 
     getFill() {
-        if (this.props.ptnet.canFire(this.props.id)) {
-            return "#facade"
-        } else {
-            return "#ffffff"
+        if (this.props.ptnet.isRunning())  {
+            if (this.props.ptnet.canFire(this.props.id)) {
+                return "#62fa75"
+            } else if (!this.props.ptnet.transitionFails(this.props.id)) {
+                return "#fab5b0"
+            }
         }
+        return "#ffffff"
     }
 
 

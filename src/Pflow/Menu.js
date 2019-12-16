@@ -1,49 +1,40 @@
-import React, { Component } from 'react'
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
-const ACTIONS = [
-    "select",
-    "delete",
-    "place",
-    "transition",
-    "arc",
-    "token",
-    "execute",
-];
+const useStyles = makeStyles(theme => ({
+      root: {
+              flexGrow: 1,
+            },
+      menuButton: {
+              marginRight: theme.spacing(2),
+            },
+      title: {
+              flexGrow: 1,
+            },
+}));
 
-export default class Menu extends Component {
-    constructor(props) {
-        super(props);
-        this.menuAction = this.menuAction.bind(this);
-    }
+export default function ButtonAppBar() {
+      const classes = useStyles();
 
-    menuAction(action) {
-        this.props.ptnet.menuAction(action, (mode) => {
-            this.setState({ mode: mode })
-        })
-    }
-
-    componentDidMount() {
-        this.setState({ mode: this.props.ptnet.getMode() })
-    }
-
-    render() {
-        if (! this.state) {
-            return (<React.Fragment/>)
-        }
-
-        let actions = ACTIONS.map((label) => {
-            let style = { color: "grey"};
-            if (this.state.mode === label) {
-                style = { color: "black"};
-            }
-            return (<button key={label} style={style} name={label}
-                onClick={() => this.menuAction(label)}
-                onContextMenu={(evt) => evt.preventDefault() }
-            >{label}</button>)
-        }) ;
-
-        return (
-            <div className="menu" mode={this.props.ptnet.mode}> {actions} </div>
-        )
-    }
+      return (
+              <div className={classes.root}>
+                 <AppBar position="static">
+                    <Toolbar>
+                       <Typography variant="h6" className={classes.title}>
+                           Pflow-Editor
+                       </Typography>
+                        <a
+                            href="https://github.com/stackdump/pflow-editor"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={classes.dropdownLink}
+                        > <GitHubIcon /> </a>
+                    </Toolbar>
+                 </AppBar>
+              </div>
+            );
 }

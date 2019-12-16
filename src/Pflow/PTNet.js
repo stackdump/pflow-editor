@@ -4,6 +4,8 @@ export default function NewPTNet(p) {
     return new PTNet(p.onLoad, p.onSave, p.onUpdate)
 }
 
+const HEADER_OFFSET = 60;
+
 // handle editor/simulator actions
 class PTNet {
 
@@ -13,26 +15,37 @@ class PTNet {
         this.schema = pflow.schema;
         this.places = pflow.places;
         this.transitions = pflow.transitions;
+        this.vars =  pflow.vars || {}; // variables that can be bound to state machine elements
+        this.applyVars(); // overwrite mapped values
 
         // app state
         this.mode = 'select';
-        this.update = onUpdate;
+        this.update = () => {
+            this.applyVars();
+            onUpdate();
+        };
         this.save = onSave;
         this.simulation = null;
         this.lastSelected = null;
+        this.currentSelection = null;
 
         // accessors
         this.getMode = this.getMode.bind(this);
         this.getObj = this.getObj.bind(this);
         this.getTokenCount = this.getTokenCount.bind(this);
+        this.getCurrentObj = this.getCurrentObj.bind(this);
+        this.getType = this.getType.bind(this);
 
         // editor
         this.menuAction = this.menuAction.bind(this);
         this.positionUpdated = this.positionUpdated.bind(this);
+        this.applyVars = this.applyVars.bind(this);
 
         // simulation
         this.isRunning = this.isRunning.bind(this);
         this.canFire = this.canFire.bind(this);
+        this.guardsFail = this.guardsFail.bind(this);
+        this.transitionFails = this.transitionFails.bind(this);
         this.fire = this.fire.bind(this);
         this.isSelected = this.isSelected.bind(this);
 
@@ -43,6 +56,68 @@ class PTNet {
         this.arcClick=this.arcClick.bind(this);
         this.arcAltClick=this.arcAltClick.bind(this);
         this.placeAltClick=this.placeAltClick.bind(this);
+        this.varClick=this.varClick.bind(this);
+        this.varAltClick=this.varAltClick.bind(this);
+    }
+
+    applyVars() {
+        for (const label in this.vars) {
+            const v = this.vars[label];
+
+            for (const i in v['mapping']) {
+                let rule = v['mapping'][i];
+
+                if ('weight' in rule) { // override an Arc weight
+                    let p = this.getObj(rule['weight']['source']);
+                    let t = this.getObj(rule['weight']['target']);
+                    let unit = -1;
+                    if (p && 'delta' in p) { // transition
+                        // swap
+                        t = this.getObj(rule['weight']['source']);
+                        p = this.getObj(rule['weight']['target']);
+                        unit = 1
+                    }
+                    if (t && p) {
+                        t.delta[p.offset] = v.initial*unit;
+                    }
+                }
+
+                if ('initial' in rule)  {
+                    let p = this.getObj(rule['initial']['target']);
+                    if (!p || p && 'delta' in p) {
+                        return // can't map values to a transition
+                    }
+                    p.initial = v.initial;
+                }
+            }
+        }
+    }
+
+    getType(obj) {
+        if (obj.target && obj.source) {
+            return "Arc"
+        }
+
+        if ( obj.target in this.transitions) {
+            return "Transition"
+        }
+
+        if (obj.target in this.vars) {
+            return "Variable"
+        }
+
+        if (obj.target in this.places) {
+            return "Place"
+        }
+    }
+
+    getCurrentObj() {
+        return this.currentSelection;
+    }
+
+    onObjSelect(obj, callback) {
+        this.currentSelection = obj;
+        callback()
     }
 
     placeSeq() {
@@ -59,6 +134,14 @@ class PTNet {
             x++;
         }
         return "txn"+x;
+    }
+
+    varSeq() {
+        let x = 0;
+        while (this.vars["var"+x]) {
+            x++;
+        }
+        return "var"+x;
     }
 
     isRunning() {
@@ -103,6 +186,14 @@ class PTNet {
         }
     }
 
+    guardsFail(oid, multiple) {
+        return this.simulation.guardsFail(oid, multiple)
+    }
+
+    transitionFails(oid, multiple) {
+        return this.simulation.transitionFails(oid, multiple)
+    }
+
     getMode() {
         return this.mode
     }
@@ -110,8 +201,10 @@ class PTNet {
     getObj(oid) {
         if (oid in this.transitions) {
             return this.transitions[oid];
+        } else if (oid in this.places) {
+                return this.places[oid];
         } else {
-            return this.places[oid];
+            return this.vars[oid];
         }
     }
 
@@ -166,7 +259,8 @@ class PTNet {
             initial: 0,
             capacity: 0,
             offset: newOffset,
-            position: coords,
+            // KLUDGE this allows for the size of the menu bar
+            position: { x: coords.x, y: coords.y-HEADER_OFFSET },
         };
 
         // extend delta vector size
@@ -182,7 +276,7 @@ class PTNet {
         this.transitions[oid] = {
             role: 'default',
             delta: this.emptyVector(),
-            position: coords,
+            position: { x: coords.x, y: coords.y-HEADER_OFFSET },
             guards: {}
         };
         return true;
@@ -197,6 +291,10 @@ class PTNet {
             }
             case 'transition': {
                 updated = this.addTransition({x: evt.clientX-8, y: evt.clientY-25});
+                break;
+            }
+            case 'var': {
+                updated = this.addVar({x: evt.clientX-8, y: evt.clientY-25});
                 break;
             }
             default: {
@@ -302,50 +400,48 @@ class PTNet {
     }
 
     placeClick(oid) {
-        let updated = false;
-        switch (this.mode) {
-            case 'delete': {
-                this.delPlace(oid);
-                updated = true;
-                break;
+        this.onObjSelect({ target: oid }, () => {
+            switch (this.mode) {
+                case 'delete': {
+                    this.delPlace(oid);
+                    break;
+                }
+                case 'arc': {
+                    this.selectObj(oid);
+                    break;
+                }
+                case 'token': {
+                    this.getObj(oid).initial++;
+                    break;
+                }
+                default: {
+                }
             }
-            case 'arc': {
-                this.selectObj(oid);
-                updated = true;
-                break;
-            }
-            case 'token': {
-                this.getObj(oid).initial++;
-                updated = true;
-                break;
-            }
-            default: {
-            }
-        }
-        if (updated) { this.update() }
+            this.update()
+        });
     }
 
     transitionClick(oid) {
-        let updated = false;
-        switch (this.mode) {
-            case 'execute': {
-                updated = this.fire(oid);
-                break;
+        this.onObjSelect({ target: oid }, () => {
+            switch (this.mode) {
+                case 'execute': {
+                    this.fire(oid);
+                    break;
+                }
+                case 'delete': {
+                    delete this.transitions[oid];
+                    this.currentSelection = null;
+                    break;
+                }
+                case 'arc': {
+                    this.selectObj(oid);
+                    break;
+                }
+                default: {
+                }
             }
-            case 'delete': {
-                delete this.transitions[oid];
-                updated = true;
-                break;
-            }
-            case 'arc': {
-                this.selectObj(oid);
-                updated = true;
-                break;
-            }
-            default: {
-            }
-        }
-        if (updated) { this.update() }
+            this.update()
+        });
 
     }
 
@@ -429,26 +525,28 @@ class PTNet {
     }
 
     arcClick(obj) {
-        let updated = false;
-        switch (this.mode) {
-            case 'token': {
-                console.log("token++");
-                updated = this.addArcToken(obj, 1);
-                break;
-            }
-            case 'delete': {
-                if (obj.source in this.transitions) {
-                    this.delArc(obj)
-                } else {
-                    this.delArc(obj)
+        this.onObjSelect(obj, ()  => {
+            switch (this.mode) {
+                case 'token': {
+                    this.addArcToken(obj, 1);
+                    break;
                 }
-                updated = true;
-                break;
+                case 'delete': {
+                    if (obj.source in this.transitions) {
+                        this.delArc(obj)
+                    } else {
+                        this.delArc(obj)
+                    }
+                    break;
+                }
+                case 'var': {
+                    // TODO: add var mapping
+                }
+                default: {
+                }
             }
-            default: {
-            }
-        }
-        if (updated) { this.update() }
+            this.update()
+        });
     }
 
     arcAltClick(obj) {
@@ -468,4 +566,50 @@ class PTNet {
         if (updated) { this.update() }
 
     }
+
+    addVar(coords) {
+        let newOffset = Object.keys(this.vars).length;
+        this.vars[this.varSeq()] = {
+            initial: 0,
+            offset: newOffset,
+            // KLUDGE this allows for the size of the menu bar
+            position: { x: coords.x, y: coords.y-HEADER_OFFSET },
+        };
+
+        return true;
+    }
+
+    addVarToken(oid, multiple) {
+        this.vars[oid].initial+= multiple || 1;
+        return true
+    }
+
+    varClick(oid) {
+        this.onObjSelect({  target: oid}, () => {
+            switch (this.mode) {
+                case 'token': {
+                    this.addVarToken(oid, 1);
+                    break;
+                }
+                default: {
+                }
+            }
+            this.update();
+        })
+    }
+
+    varAltClick(oid) {
+        this.onObjSelect({ target: oid }, () => {
+            switch (this.mode) {
+                case 'token': {
+                    this.addVarToken(oid, -1);
+                    break;
+                }
+                default: {
+                }
+            }
+            this.update();
+        })
+    }
+
 }
