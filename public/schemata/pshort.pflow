@@ -10,80 +10,110 @@
         <label/>
         <place>
             <id>7</id>
-            <x>355</x>
-            <y>278</y>
+            <x>289</x>
+            <y>128</y>
             <label>COLLATERAL</label>
-            <tokens>2</tokens>
+            <tokens>5</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>15</id>
-            <x>363</x>
-            <y>387</y>
+            <x>289</x>
+            <y>202</y>
             <label>TOKENS</label>
-            <tokens>28</tokens>
+            <tokens>7</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>18</id>
-            <x>358</x>
-            <y>194</y>
+            <x>503</x>
+            <y>282</y>
             <label>HALTED</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
-            <id>12</id>
-            <x>355</x>
-            <y>107</y>
-            <label>GAS</label>
-            <tokens>0</tokens>
-            <isStatic>false</isStatic>
-        </place>
-        <place>
             <id>21</id>
-            <x>660</x>
-            <y>388</y>
+            <x>499</x>
+            <y>170</y>
             <label>OUTPUT</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
+        <place>
+            <id>22</id>
+            <x>291</x>
+            <y>281</y>
+            <label>VALUE</label>
+            <tokens>8</tokens>
+            <isStatic>false</isStatic>
+        </place>
         <transition>
             <id>9</id>
-            <x>507</x>
-            <y>387</y>
+            <x>406</x>
+            <y>169</y>
             <label>COVER</label>
         </transition>
         <transition>
-            <id>20</id>
-            <x>497</x>
-            <y>106</y>
-            <label>FEE</label>
-        </transition>
-        <transition>
-            <id>19</id>
-            <x>220</x>
-            <y>195</y>
-            <label>HALT</label>
-        </transition>
-        <transition>
             <id>11</id>
-            <x>497</x>
-            <y>195</y>
+            <x>140</x>
+            <y>196</y>
             <label>TEST</label>
         </transition>
         <transition>
             <id>8</id>
-            <x>225</x>
-            <y>278</y>
+            <x>140</x>
+            <y>135</y>
             <label>INPUT</label>
         </transition>
         <transition>
-            <id>13</id>
-            <x>220</x>
-            <y>105</y>
-            <label>FUND</label>
+            <id>23</id>
+            <x>139</x>
+            <y>254</y>
+            <label>HALT</label>
         </transition>
+        <arc>
+            <type>regular</type>
+            <sourceId>22</sourceId>
+            <destinationId>11</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>9</sourceId>
+            <destinationId>21</destinationId>
+            <multiplicity>8</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>7</sourceId>
+            <destinationId>9</destinationId>
+            <multiplicity>5</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>15</sourceId>
+            <destinationId>9</destinationId>
+            <multiplicity>7</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>9</sourceId>
+            <destinationId>18</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>8</sourceId>
+            <destinationId>7</destinationId>
+            <multiplicity>5</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>8</sourceId>
+            <destinationId>15</destinationId>
+            <multiplicity>7</multiplicity>
+        </arc>
         <arc>
             <type>inhibitor</type>
             <sourceId>18</sourceId>
@@ -92,56 +122,20 @@
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>13</sourceId>
-            <destinationId>12</destinationId>
+            <sourceId>18</sourceId>
+            <destinationId>8</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>8</sourceId>
-            <destinationId>15</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>19</sourceId>
-            <destinationId>18</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>12</sourceId>
-            <destinationId>20</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>8</sourceId>
-            <destinationId>7</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>9</sourceId>
-            <destinationId>18</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>15</sourceId>
+            <sourceId>22</sourceId>
             <destinationId>9</destinationId>
-            <multiplicity>1</multiplicity>
+            <multiplicity>8</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>7</sourceId>
-            <destinationId>9</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>9</sourceId>
-            <destinationId>21</destinationId>
+            <sourceId>23</sourceId>
+            <destinationId>18</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
     </subnet>
@@ -150,8 +144,6 @@
             <id>1</id>
             <name>PegNet</name>
             <transitionId>11</transitionId>
-            <transitionId>19</transitionId>
-            <transitionId>20</transitionId>
             <createCase>false</createCase>
             <destroyCase>false</destroyCase>
         </role>
@@ -160,13 +152,6 @@
             <name>Owner</name>
             <transitionId>8</transitionId>
             <transitionId>9</transitionId>
-            <createCase>false</createCase>
-            <destroyCase>false</destroyCase>
-        </role>
-        <role>
-            <id>3</id>
-            <name>ValidSig</name>
-            <transitionId>13</transitionId>
             <createCase>false</createCase>
             <destroyCase>false</destroyCase>
         </role>

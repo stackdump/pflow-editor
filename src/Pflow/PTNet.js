@@ -27,6 +27,7 @@ class PTNet {
         this.save = onSave;
         this.simulation = null;
         this.lastSelected = null;
+        this.relatedObjects = null;
         this.currentSelection = null;
 
         // accessors
@@ -84,7 +85,7 @@ class PTNet {
 
                 if ('initial' in rule)  {
                     let p = this.getObj(rule['initial']['target']);
-                    if (!p || p && 'delta' in p) {
+                    if (!p || (p && 'delta' in p)) {
                         return // can't map values to a transition
                     }
                     p.initial = v.initial;
@@ -117,7 +118,32 @@ class PTNet {
 
     onObjSelect(obj, callback) {
         this.currentSelection = obj;
-        callback()
+        let oid = obj.target;
+
+        this.relatedObjects = [];
+        // Search for Var relations
+        for (const i  in this.vars) {
+            let v = this.vars[i];
+            for (const m  in v.mapping) {
+                let x = v.mapping[m];
+                if ('weight' in x) {
+                    if (oid === x.weight['source'] || oid === x.weight['target']) {
+                        this.relatedObjects.push(x.weight);
+                    }
+                } else if('initial' in x) {
+                    if (oid === x.initial['target']) {
+                        this.relatedObjects.push(x.initial);
+                    }
+                } else {
+                    console.error(x)
+                }
+            }
+        }
+        //console.log(this.currentSelection);
+        //console.log(this.relatedObjects);
+
+        callback();
+        this.update()
     }
 
     placeSeq() {
@@ -349,6 +375,8 @@ class PTNet {
     }
 
     selectObj(oid) {
+        this.currentSelection = {target: oid};
+
         if (!this.lastSelected) {
             this.lastSelected = oid;
         } else {
@@ -402,22 +430,18 @@ class PTNet {
     placeClick(oid) {
         this.onObjSelect({ target: oid }, () => {
             switch (this.mode) {
-                case 'delete': {
-                    this.delPlace(oid);
-                    break;
-                }
-                case 'arc': {
-                    this.selectObj(oid);
-                    break;
-                }
                 case 'token': {
                     this.getObj(oid).initial++;
                     break;
                 }
+                case 'delete': {
+                    this.delPlace(oid);
+                    break;
+                }
                 default: {
+                    this.selectObj(oid);
                 }
             }
-            this.update()
         });
     }
 
@@ -438,20 +462,72 @@ class PTNet {
                     break;
                 }
                 default: {
+                    this.currentSelection = { target: oid };
                 }
             }
-            this.update()
         });
 
     }
 
-    isSelected(oid) {
-        return this.lastSelected === oid
+    // { source: <str>, target: <str> }
+    isSelected(obj) {
+        if (! this.currentSelection) {
+            return false
+        }
+
+        let type = this.getType(this.currentSelection);
+        switch (this.mode) {
+            case 'execute': {
+                return false
+            }
+            case 'arc': {
+                if (this.lastSelected === obj.target) {
+                    return true
+                }
+                break;
+            }
+            default: {
+                if (type === 'Variable') {
+                    // check for relations
+                    for (const v in this.vars[this.currentSelection.target].mapping) {
+                        let m = this.vars[this.currentSelection.target].mapping[v];
+                        let match = {};
+
+                        if ('weight' in m) {
+                            match = m.weight
+                        } else if ('initial' in m) {
+                            match = m.initial
+                        } else {
+                            return false
+                        }
+
+                        if ('source' in obj && match.source) {
+                            if (obj['source'] === match.source && obj['target'] === match.target) {
+                                return true
+                            }
+                        } else {
+                            if (obj['target'] === match.target) {
+                                return true
+                            }
+
+                        }
+                    }
+                } else {
+                    if ('source' in obj) {
+                        return this.currentSelection['source'] === obj.source && this.currentSelection['target'] === obj.target
+                    }
+
+                    if (this.currentSelection['source'] === obj.target || this.currentSelection['target'] === obj.target) {
+                        return true
+                    }
+                }
+                return false;
+            }
+        }
     }
 
     toggleInhibitor(arc) {
         if (arc.source in this.transitions) {
-            //console.log("inhibitor source must be a place");
             return false;
         }
 
@@ -541,29 +617,30 @@ class PTNet {
                 }
                 case 'var': {
                     // TODO: add var mapping
+                    break;
+                }
+                default: {
+                }
+            }
+        });
+    }
+
+    arcAltClick(obj) {
+        this.onObjSelect(obj, () => {
+            switch (this.mode) {
+                case 'arc': {
+                    this.toggleInhibitor(obj);
+                    break;
+                }
+                case 'token': {
+                    this.addArcToken(obj, -1);
+                    break;
                 }
                 default: {
                 }
             }
             this.update()
-        });
-    }
-
-    arcAltClick(obj) {
-        let updated = false;
-        switch (this.mode) {
-            case 'arc': {
-                updated = this.toggleInhibitor(obj);
-                break;
-            }
-            case 'token': {
-                updated = this.addArcToken(obj, -1);
-                break;
-            }
-            default: {
-            }
-        }
-        if (updated) { this.update() }
+        })
 
     }
 
@@ -594,7 +671,6 @@ class PTNet {
                 default: {
                 }
             }
-            this.update();
         })
     }
 
@@ -608,7 +684,6 @@ class PTNet {
                 default: {
                 }
             }
-            this.update();
         })
     }
 

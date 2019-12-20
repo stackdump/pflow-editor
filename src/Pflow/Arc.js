@@ -7,6 +7,7 @@ export default class Arc extends Component {
         this.onClick = this.onClick.bind(this);
         this.onAltClick = this.onAltClick.bind(this);
         this.getMarker = this.getMarker.bind(this);
+        this.getStroke = this.getStroke.bind(this);
     }
 
     getArcDef() {
@@ -29,6 +30,15 @@ export default class Arc extends Component {
             return "url(#markerInhibit1)"
         } else {
             return "url(#markerArrow1)"
+        }
+    }
+
+    getStroke() {
+        let obj = { target: this.props.target, source: this.props.source };
+        if (this.props.ptnet.isSelected(obj)) {
+            return "#8140ff"
+        }  else {
+            return "#000000"
         }
     }
 
@@ -77,7 +87,7 @@ export default class Arc extends Component {
                 onContextMenu={this.onAltClick}
             >
                 <line
-                    stroke="#000000"
+                    stroke={this.getStroke()}
                     markerEnd={this.getMarker()}
                     id={this.props.id}
                     x1={x1} y1={y1}

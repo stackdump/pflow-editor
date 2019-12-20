@@ -44,6 +44,8 @@ export default class Properties extends Component {
         }
 
         data.type = this.props.ptnet.getType(obj);
+        data.related = this.props.ptnet.relatedObjects;
+
         if (!obj)  {
             return this.props.ptnet.vars;
         }

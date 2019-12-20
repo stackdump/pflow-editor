@@ -22,10 +22,9 @@ export default class PVar extends Draggable {
     render() {
         if (! this.state ) { return(<g/>) }
         let p = this.props.ptnet.getObj(this.props.id).position;
-        let obj = this.props.ptnet.getObj(this.props.id).position;
 
         let tokenCount = () => {
-            let tokens =this.props.ptnet.vars[this.props.id].initial;
+            let tokens = this.props.ptnet.vars[this.props.id].initial;
 
             if (tokens === 0){
                 return // don't show zeros

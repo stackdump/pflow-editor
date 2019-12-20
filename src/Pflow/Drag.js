@@ -12,7 +12,7 @@ export default class Draggable extends Component {
     }
 
     getStroke() {
-        if (this.props.ptnet.isSelected(this.props.id)) {
+        if (this.props.ptnet.isSelected({target: this.props.id})) {
             return "#8140ff"
         }  else {
             return "#000000"
