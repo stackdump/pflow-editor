@@ -1,0 +1,58 @@
+
+<pre>
+  PIP: 8
+  Title: pFinance primitives
+  Layer: Consensus (hard fork)
+  Author: Matt York <matt.york@factom.com>
+  Comments-Summary: No comments yet.
+  Comments-URI: https://github.com/pegnet/pips/wiki/Comments:PIP-0008
+  Status: Active
+  Type: Standards Track
+  Created: 2019-12-21
+  License: BSD-2-Clause
+</pre>
+
+==Abstract==
+
+Implementing a formal specification for financial primitives allows PegNet transaction designers to scaffold out
+the data structures needed to construct a new kind of pFinance transaction.
+
+==Specification==
+
+See [Go Code](https://github.com/stackdump/pfinance-primitives)
+
+Reference implementation uses 'Pflow' encoded Petri Net to scaffold out the code for a pegnet transaction.
+
+TODO: describe pflow design approach 
+
+TBD: Expose a set of Golang interfaces for integration w/ pegnetd.
+
+==Motivation==
+
+The design of PegNet requires each node to independently process transactions.
+One affect of this design is that it is necessary to process many transactions in batches to properly
+determine validity.
+
+Each new type of transaction is a link in this recursive chain of execution.
+
+In this situation, one coding challenge is to provide a generic mechanism for declaring new types of transactions,
+while at the same time keeping a level of standardization so validations are deterministic.
+
+This PIP specification proposes to adopt a flexible foundation for designing increasingly complex transactions.
+
+==Rationale==
+
+There are many ways to solve this particular problem.
+
+By Choosing to integrate a specification that is formally verifiable allows for the design of more complex
+pFinance rules without losing the ability to process the rules in a standard way while avoiding the
+need for a Virtual Machine or any specific runtime environment.
+
+Embracing this type of design additionally provides an avenue
+to construct tools to analyze an reason about Pegonomics of the system.
+
+==Reference implementation== 
+
+Interactive Simulator https://www.blahchain.com/pflow-editor/
+
+Golang package https://github.com/stackdump/pfinance-primitives
