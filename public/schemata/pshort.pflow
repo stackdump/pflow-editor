@@ -74,45 +74,21 @@
         </transition>
         <arc>
             <type>regular</type>
-            <sourceId>22</sourceId>
-            <destinationId>11</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>9</sourceId>
-            <destinationId>21</destinationId>
-            <multiplicity>8</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>7</sourceId>
-            <destinationId>9</destinationId>
-            <multiplicity>5</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>15</sourceId>
-            <destinationId>9</destinationId>
-            <multiplicity>7</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>9</sourceId>
+            <sourceId>23</sourceId>
             <destinationId>18</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>8</sourceId>
-            <destinationId>7</destinationId>
-            <multiplicity>5</multiplicity>
+            <sourceId>22</sourceId>
+            <destinationId>9</destinationId>
+            <multiplicity>8</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>8</sourceId>
-            <destinationId>15</destinationId>
-            <multiplicity>7</multiplicity>
+            <sourceId>18</sourceId>
+            <destinationId>8</destinationId>
+            <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>inhibitor</type>
@@ -122,20 +98,44 @@
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>18</sourceId>
-            <destinationId>8</destinationId>
+            <sourceId>8</sourceId>
+            <destinationId>15</destinationId>
+            <multiplicity>7</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>8</sourceId>
+            <destinationId>7</destinationId>
+            <multiplicity>5</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>9</sourceId>
+            <destinationId>18</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>22</sourceId>
+            <sourceId>15</sourceId>
             <destinationId>9</destinationId>
+            <multiplicity>7</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>7</sourceId>
+            <destinationId>9</destinationId>
+            <multiplicity>5</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>9</sourceId>
+            <destinationId>21</destinationId>
             <multiplicity>8</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>23</sourceId>
-            <destinationId>18</destinationId>
+            <sourceId>22</sourceId>
+            <destinationId>11</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
     </subnet>
@@ -144,6 +144,7 @@
             <id>1</id>
             <name>PegNet</name>
             <transitionId>11</transitionId>
+            <transitionId>23</transitionId>
             <createCase>false</createCase>
             <destroyCase>false</destroyCase>
         </role>

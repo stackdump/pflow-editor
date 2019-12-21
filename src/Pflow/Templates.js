@@ -13,7 +13,8 @@ TEMPLATES[PSHORT] = (pf) => {
 
     let collateral = 5; // USD shorted at rate = 5/7
     let tokens = 7; // number of tokens being shorted
-    let rate_in_block_m = 2/7; // current USD value of short contract
+    let rate = 2;
+    let rate_in_block_m = rate/tokens; // current USD value of short contract
 
     // NOTE: aside from binding values to the petri-net
     // this is the only calculation made per transaction
@@ -53,7 +54,7 @@ TEMPLATES[PSHORT] = (pf) => {
             initial: value,
             offset: 2,
             position: { x: 700, y: 260},
-            description: "USD VALUE = 2 * COLLATERAL - Y * (rate-of-pXYZ-in-block-M = 2/7)",
+            description: "USD VALUE = 2 * COLLATERAL - Y * (rate-of-pXYZ-in-block-M = "+rate+"/"+tokens+")",
             mapping: [
                 {weight: { source: "COVER", target: "OUTPUT"}},
                 {weight: { source: "VALUE", target: "COVER"}},

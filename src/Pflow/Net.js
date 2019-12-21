@@ -43,12 +43,12 @@ class Net extends Component {
             for (const i in t[txn].delta) {
                 let v = t[txn].delta[i];
                 if (v > 0) {
-                    let id = txn+'->'+place_index[i];
+                    let id = txn+'--'+place_index[i];
                     arcs.push(
                         <Arc key={id}  id={id} ptnet={this.props.ptnet} source={txn} target={place_index[i]} transition={t}/>
                     );
                 } else if (v < 0) {
-                    let id = txn+'<-'+place_index[i];
+                    let id = place_index[i]+'-='+txn;
                     arcs.push(
                         <Arc key={id} id={id} ptnet={this.props.ptnet} source={place_index[i]} target={txn} transition={t}/>
                     );
