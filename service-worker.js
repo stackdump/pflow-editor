@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/pflow-editor/precache-manifest.8a2e8b09d5d248d238640e425815aa1d.js"
+  "/pflow-editor/precache-manifest.0ce18023bbd8b5e13dbf2189703e27ef.js"
 );
 
 self.addEventListener('message', (event) => {
