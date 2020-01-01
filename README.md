@@ -12,10 +12,10 @@ This tool supplies a GUI tool for creating and simulating Petri-Net Designs.
 
 ### Why use Petri-Nets?
 
-[Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) & [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) techniques can be embraced more formally by using Petri-Nets as an executible specification for business rules and process design.
+[Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) & [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) techniques can be embraced more formally by using Petri-Nets as an executable specification for business rules and process design.
 
 Petri-Nets are very well explored structures that serve as excellent tools for modeling distribued systems.
 
-Petri-Nets can be defined and run in any programming language with deterministic results and predictable behavior.
+Petri-Nets can be coded to run in any programming language with deterministic results and predictable behavior.
 
 Datasets designed with Petri-Nets are easy to vectorize, making generated data sets attractive targets for ETL pipelines.
