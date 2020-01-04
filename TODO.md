@@ -1,8 +1,10 @@
 WIP
 ---
 - [ ] set capacity from vars map
-- [ ] load Nav Menu from a pflow
-- [ ] 'template' loading var maps
+- [ ] 'template' loading var maps - add toolbar controls
+
+- [ ] # automate deployment to gh-pages
+      https://create-react-app.dev/docs/deployment/#step-2-install-gh-pages-and-add-deploy-to-scripts-in-packagejson
 
 BACKLOG
 -------
@@ -10,10 +12,14 @@ BACKLOG
 - [ ] add nested property description for each place transiion arc component
 - [ ] allow simulation as a specific user role
 
+- [ ] Game Design:
+      allow ability to set probabilty on an arc
+      - could allow partial conversion if all outputs are whole tokens
+
+- [ ] add index.xml file to load different petri-nets
+
 ICEBOX
 ------
-- [ ] # automate deployment to gh-pages
-      https://create-react-app.dev/docs/deployment/#step-2-install-gh-pages-and-add-deploy-to-scripts-in-packagejson
 
 - [ ] in-browser editing of global var map
 - [ ] add a way to list and select another pflow file
@@ -27,6 +33,7 @@ ICEBOX
 
 - [ ] better layout + styles
 - [ ] help/tutorial
+- [ ] load Nav Menu from a pflow
 
 
 NOTES
